@@ -35,7 +35,6 @@ def main():
 	tot.set_msg_color('M')
 	
 	start_alternate_screen()
-	print '\033[?25l'
 
 	mem.draw('RAM')
 	swp.draw('Swap')
@@ -49,9 +48,6 @@ def main():
 	
 	tot.draw('Total CPU')
 	
-	start_alternate_screen()
-	print '\033[?25l'
-	
 	try:
 		while (True):
 			mem.change_progress(psutil.virtual_memory().percent * 10)
@@ -64,16 +60,19 @@ def main():
 			tot.change_progress(psutil.cpu_percent() * 10)
 
 			print ''
-			raw = psutil.boot_time()
-			ut = conv_systime(time.time() - raw)
-			print bcolors['G'] + 'System uptime: ' + bcolors['K'] + ut + bcolors['N']
+
+			draw_systime()
 	
 			time.sleep(1)
 	
 	except KeyboardInterrupt:
 		end_alternate_screen()
-		print '\033[?25h'
 		pass
+
+def draw_systime():
+	raw = psutil.boot_time()
+	ut = conv_systime(time.time() - raw)
+	print bcolors['G'] + 'System uptime: ' + bcolors['K'] + ut + bcolors['N']
 
 def conv_systime(raw):
 	m, s = divmod(raw, 60)
@@ -83,10 +82,12 @@ def conv_systime(raw):
 
 def start_alternate_screen():
     sys.stdout.write("\033[?1049h\033[H")
+    sys.stdout.write("\033[?25l")
     sys.stdout.flush()
 
 def end_alternate_screen():
     sys.stdout.write("\033[?1049l")
+    sys.stdout.write("\033[?25h")
     sys.stdout.flush()
 
 if __name__ == '__main__':
