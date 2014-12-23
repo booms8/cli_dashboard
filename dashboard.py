@@ -34,6 +34,9 @@ def main():
 	tot.set_perc_color('B')
 	tot.set_msg_color('M')
 	
+	start_alternate_screen()
+	print '\033[?25l'
+
 	mem.draw('RAM')
 	swp.draw('Swap')
 	
@@ -46,6 +49,7 @@ def main():
 	
 	tot.draw('Total CPU')
 	
+	start_alternate_screen()
 	print '\033[?25l'
 	
 	try:
@@ -67,6 +71,7 @@ def main():
 			time.sleep(1)
 	
 	except KeyboardInterrupt:
+		end_alternate_screen()
 		print '\033[?25h'
 		pass
 
@@ -75,6 +80,14 @@ def conv_systime(raw):
 	h, m = divmod(m, 60)
 	d, h = divmod(h, 24)
 	return '{0:02d}d, {1:02d}:{2:02d}:{3:02d}'.format(int(d), int(h), int(m), int(s))
+
+def start_alternate_screen():
+    sys.stdout.write("\033[?1049h\033[H")
+    sys.stdout.flush()
+
+def end_alternate_screen():
+    sys.stdout.write("\033[?1049l")
+    sys.stdout.flush()
 
 if __name__ == '__main__':
 	main()
