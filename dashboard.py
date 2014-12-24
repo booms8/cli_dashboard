@@ -59,7 +59,7 @@ def main():
 	
 			tot.change_progress(psutil.cpu_percent() * 10)
 
-			print ''
+			sys.stdout.write('\n')
 
 			draw_systime()
 	
@@ -72,7 +72,7 @@ def main():
 def draw_systime():
 	raw = psutil.boot_time()
 	ut = conv_systime(time.time() - raw)
-	print bcolors['G'] + 'System uptime: ' + bcolors['K'] + ut + bcolors['N']
+	sys.stdout.write(bcolors['G'] + 'System uptime: ' + bcolors['K'] + ut + bcolors['N'] + '\n')
 
 def conv_systime(raw):
 	m, s = divmod(raw, 60)
